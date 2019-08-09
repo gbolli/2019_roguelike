@@ -1,0 +1,13 @@
+# active
+
+source env/bin/activate
+
+
+# check environment
+
+which python
+
+
+# leave environment
+
+deactivate
