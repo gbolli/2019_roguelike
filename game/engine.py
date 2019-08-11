@@ -2,6 +2,7 @@ import tcod as libtcod
 
 from entity import Entity
 from input_handlers import handle_keys
+from map_objects.game_map import GameMap
 from render_functions import render_all, clear_all
 
 
@@ -9,6 +10,14 @@ def main():
     # variables
     screen_width = 80
     screen_height = 50
+
+    map_width = 80
+    map_height = 45
+
+    colors = {
+        'dark_wall': libtcod.Color(0, 0, 100),
+        'dark_ground': libtcod.Color(50, 50, 150)
+    }
 
     player = Entity(int(screen_width / 2),
                     int(screen_height / 2), '@', libtcod.green)
@@ -24,7 +33,11 @@ def main():
     libtcod.console_init_root(
         screen_width, screen_height, 'game name placeholder', False)
 
-    con = libtcod.console_new(screen_width, screen_height, )
+    # initialize console
+    con = libtcod.console_new(screen_width, screen_height)
+
+    # initialize game_map
+    game_map = GameMap(map_width, map_height)
 
     # variables for key and mouse inputs
     key = libtcod.Key()
@@ -36,8 +49,9 @@ def main():
         # capture new events / user input
         libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS, key, mouse)
 
-        # draw all entities
-        render_all(con, entities, screen_width, screen_height)
+        # draw all:  game map, entities, ...
+        render_all(con, entities, game_map,
+                   screen_width, screen_height, colors)
 
         libtcod.console_flush()
 
@@ -52,7 +66,9 @@ def main():
 
         if move:
             dx, dy = move
-            player.move(dx, dy)
+            # check for blocked before moving
+            if not game_map.is_blocked(player.x + dx, player.y + dy):
+                player.move(dx, dy)
 
         if exit:
             return True
