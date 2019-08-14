@@ -1,5 +1,6 @@
 import tcod as libtcod
 
+from components.fighter import Fighter
 from entity import Entity, get_blocking_entities_at_location
 from fov_functions import initialize_fov, recompute_fov
 from game_states import GameStates
@@ -33,24 +34,33 @@ def main():
         'light_ground': libtcod.Color(75, 75, 175)
     }
 
-    player = Entity(0, 0, '@', libtcod.green, 'Player', blocks=True)
+    # create player
+    fighter_component = Fighter(hp=30, defense=2, power=5)
+    player = Entity(0,
+                    0,
+                    '@',
+                    libtcod.green,
+                    'Player',
+                    blocks=True,
+                    fighter=fighter_component)
     entities = [player]
 
     # set graphics template (source, type, layout)
     libtcod.console_set_custom_font(
-        'arial10x10.png', libtcod.FONT_TYPE_GRAYSCALE | libtcod.FONT_LAYOUT_TCOD)
+        'arial10x10.png',
+        libtcod.FONT_TYPE_GRAYSCALE | libtcod.FONT_LAYOUT_TCOD)
 
     # create screen (width, height, title, fullscreen_boolean)
-    libtcod.console_init_root(
-        screen_width, screen_height, 'game name placeholder', False)
+    libtcod.console_init_root(screen_width, screen_height,
+                              'game name placeholder', False)
 
     # initialize console
     con = libtcod.console_new(screen_width, screen_height)
 
     # initialize game_map
     game_map = GameMap(map_width, map_height)
-    game_map.make_map(max_rooms, room_min_size, room_max_size,
-                      map_width, map_height, player, entities, max_monsters_per_room)
+    game_map.make_map(max_rooms, room_min_size, room_max_size, map_width,
+                      map_height, player, entities, max_monsters_per_room)
 
     fov_recompute = True
 
@@ -74,8 +84,8 @@ def main():
                           fov_light_walls, fov_algorithm)
 
         # draw all:  game map, entities, ...
-        render_all(con, entities, game_map,
-                   fov_map, fov_recompute, screen_width, screen_height, colors)
+        render_all(con, entities, game_map, fov_map, fov_recompute,
+                   screen_width, screen_height, colors)
 
         fov_recompute = False
 
@@ -117,10 +127,8 @@ def main():
 
         if game_state == GameStates.ENEMY_TURN:
             for entity in entities:
-                if entity != player:
-                    # placeholder enemy AI code
-                    print('The ' + entity.name +
-                          ' ponders the meaning of its existence.')
+                if entity.ai:
+                    entity.ai.take_turn()
 
             game_state = GameStates.PLAYER_TURN
 

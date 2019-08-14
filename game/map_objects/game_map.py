@@ -1,6 +1,8 @@
 import tcod as libtcod
 from random import randint
 
+from components.ai import BasicMonster
+from components.fighter import Fighter
 from entity import Entity
 from map_objects.tile import Tile
 from map_objects.rectangle import Rect
@@ -18,7 +20,8 @@ class GameMap:
 
         return tiles
 
-    def make_map(self, max_rooms, room_min_size, room_max_size, map_width, map_height, player, entities, max_monsters_per_room):
+    def make_map(self, max_rooms, room_min_size, room_max_size, map_width,
+                 map_height, player, entities, max_monsters_per_room):
         # Create rooms and passages
         rooms = []
         num_rooms = 0
@@ -95,13 +98,34 @@ class GameMap:
             x = randint(room.x1 + 1, room.x2 - 1)
             y = randint(room.y1 + 1, room.y2 - 1)
 
-            if not any([entity for entity in entities if entity.x == x and entity.y == y]):
+            if not any([
+                    entity
+                    for entity in entities if entity.x == x and entity.y == y
+            ]):
                 if randint(0, 100) < 80:
-                    monster = Entity(
-                        x, y, 'o', libtcod.desaturated_green, 'Orc', blocks=True)
+                    fighter_component = Fighter(hp=10, defense=0, power=3)
+                    ai_component = BasicMonster()
+
+                    monster = Entity(x,
+                                     y,
+                                     'o',
+                                     libtcod.desaturated_green,
+                                     'Orc',
+                                     blocks=True,
+                                     fighter=fighter_component,
+                                     ai=ai_component)
                 else:
-                    monster = Entity(
-                        x, y, 'T', libtcod.darker_green, 'Troll', blocks=True)
+                    fighter_component = Fighter(hp=16, defense=1, power=4)
+                    ai_component = BasicMonster()
+
+                    monster = Entity(x,
+                                     y,
+                                     'T',
+                                     libtcod.darker_green,
+                                     'Troll',
+                                     blocks=True,
+                                     fighter=fighter_component,
+                                     ai=ai_component)
 
                 entities.append(monster)
 
