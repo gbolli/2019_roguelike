@@ -1,6 +1,6 @@
 import tcod as libtcod
 
-from entity import Entity
+from entity import Entity, get_blocking_entities_at_location
 from fov_functions import initialize_fov, recompute_fov
 from input_handlers import handle_keys
 from map_objects.game_map import GameMap
@@ -32,7 +32,7 @@ def main():
         'light_ground': libtcod.Color(75, 75, 175)
     }
 
-    player = Entity(0, 0, '@', libtcod.green)
+    player = Entity(0, 0, '@', libtcod.green, 'Player', blocks=True)
     entities = [player]
 
     # set graphics template (source, type, layout)
@@ -89,10 +89,19 @@ def main():
 
         if move:
             dx, dy = move
+            destination_x = player.x + dx
+            destination_y = player.y + dy
+
             # check for blocked before moving
-            if not game_map.is_blocked(player.x + dx, player.y + dy):
-                player.move(dx, dy)
-                fov_recompute = True
+            if not game_map.is_blocked(destination_x, destination_y):
+                target = get_blocking_entities_at_location(
+                    entities, destination_x, destination_y)
+                if target:
+                    print('You kick the ' + target.name +
+                          ' in the shin, much to its chagrin!')
+                else:
+                    player.move(dx, dy)
+                    fov_recompute = True
 
         if exit:
             return True
