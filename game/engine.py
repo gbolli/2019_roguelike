@@ -2,6 +2,7 @@ import tcod as libtcod
 
 from entity import Entity, get_blocking_entities_at_location
 from fov_functions import initialize_fov, recompute_fov
+from game_states import GameStates
 from input_handlers import handle_keys
 from map_objects.game_map import GameMap
 from render_functions import render_all, clear_all
@@ -60,6 +61,8 @@ def main():
     mouse = libtcod.Mouse()
 
     # game loop
+    game_state = GameStates.PLAYER_TURN
+
     while not libtcod.console_is_window_closed():
 
         # capture new events / user input
@@ -87,7 +90,7 @@ def main():
         exit = action.get('exit')
         fullscreen = action.get('fullscreen')
 
-        if move:
+        if move and game_state == GameStates.PLAYER_TURN:
             dx, dy = move
             destination_x = player.x + dx
             destination_y = player.y + dy
@@ -97,17 +100,29 @@ def main():
                 target = get_blocking_entities_at_location(
                     entities, destination_x, destination_y)
                 if target:
+                    # placeholder for player combat / interaction code
                     print('You kick the ' + target.name +
                           ' in the shin, much to its chagrin!')
                 else:
                     player.move(dx, dy)
                     fov_recompute = True
 
+                game_state = GameStates.ENEMY_TURN
+
         if exit:
             return True
 
         if fullscreen:
             libtcod.console_set_fullscreen(not libtcod.console_is_fullscreen())
+
+        if game_state == GameStates.ENEMY_TURN:
+            for entity in entities:
+                if entity != player:
+                    # placeholder enemy AI code
+                    print('The ' + entity.name +
+                          ' ponders the meaning of its existence.')
+
+            game_state = GameStates.PLAYER_TURN
 
 
 if __name__ == '__main__':
