@@ -110,9 +110,7 @@ def main():
                 target = get_blocking_entities_at_location(
                     entities, destination_x, destination_y)
                 if target:
-                    # placeholder for player combat / interaction code
-                    print('You kick the ' + target.name +
-                          ' in the shin, much to its chagrin!')
+                    player.fighter.attack(target)
                 else:
                     player.move(dx, dy)
                     fov_recompute = True
