@@ -1,6 +1,8 @@
 import tcod as libtcod
 import math
 
+from render_functions import RenderOrder
+
 
 class Entity:
     """
@@ -13,6 +15,7 @@ class Entity:
                  color,
                  name,
                  blocks=False,
+                 render_order=RenderOrder,
                  fighter=None,
                  ai=None):
         self.x = x
@@ -21,6 +24,7 @@ class Entity:
         self.color = color
         self.name = name
         self.blocks = blocks
+        self.render_order = render_order
         self.fighter = fighter
         self.ai = ai
 

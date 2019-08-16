@@ -7,7 +7,7 @@ from fov_functions import initialize_fov, recompute_fov
 from game_states import GameStates
 from input_handlers import handle_keys
 from map_objects.game_map import GameMap
-from render_functions import render_all, clear_all
+from render_functions import render_all, clear_all, RenderOrder
 
 
 def main():
@@ -43,6 +43,7 @@ def main():
                     libtcod.green,
                     'Player',
                     blocks=True,
+                    render_order=RenderOrder.ACTOR,
                     fighter=fighter_component)
     entities = [player]
 
@@ -85,7 +86,7 @@ def main():
                           fov_light_walls, fov_algorithm)
 
         # draw all:  game map, entities, ...
-        render_all(con, entities, game_map, fov_map, fov_recompute,
+        render_all(con, entities, player, game_map, fov_map, fov_recompute,
                    screen_width, screen_height, colors)
 
         fov_recompute = False
