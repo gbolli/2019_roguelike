@@ -90,7 +90,8 @@ def main():
     while not libtcod.console_is_window_closed():
 
         # capture new events / user input
-        libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS, key, mouse)
+        libtcod.sys_check_for_event(
+            libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
 
         # recompute field of view (fov) if player has moved
         if fov_recompute:
@@ -100,7 +101,7 @@ def main():
         # draw all:  game map, entities, ...
         render_all(con, panel, entities, player, game_map, fov_map,
                    fov_recompute, message_log, screen_width, screen_height,
-                   bar_width, panel_height, panel_y, colors)
+                   bar_width, panel_height, panel_y, mouse, colors)
 
         fov_recompute = False
 
