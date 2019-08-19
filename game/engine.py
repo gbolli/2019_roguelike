@@ -1,6 +1,7 @@
 import tcod as libtcod
 
 from components.fighter import Fighter
+from components.inventory import Inventory
 from death_functions import kill_monster, kill_player
 from entity import Entity, get_blocking_entities_at_location
 from fov_functions import initialize_fov, recompute_fov
@@ -47,6 +48,7 @@ def main():
 
     # create player
     fighter_component = Fighter(hp=30, defense=2, power=5)
+    inventory_component = Inventory(26)
     player = Entity(0,
                     0,
                     '@',
@@ -54,7 +56,8 @@ def main():
                     'Player',
                     blocks=True,
                     render_order=RenderOrder.ACTOR,
-                    fighter=fighter_component)
+                    fighter=fighter_component,
+                    inventory=inventory_component)
     entities = [player]
 
     # set graphics template (source, type, layout)
