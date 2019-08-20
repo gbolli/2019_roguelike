@@ -8,6 +8,7 @@ from entity import Entity
 from map_objects.tile import Tile
 from map_objects.rectangle import Rect
 from render_functions import RenderOrder
+from item_functions import heal
 
 
 class GameMap:
@@ -145,7 +146,7 @@ class GameMap:
                     entity
                     for entity in entities if entity.x == x and entity.y == y
             ]):
-                item_component = Item()
+                item_component = Item(use_function=heal, amount=randint(3, 5))
                 item = Entity(x,
                               y,
                               '!',
