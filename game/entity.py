@@ -61,6 +61,9 @@ class Entity:
                                                      self.y + dy)):
             self.move(dx, dy)
 
+    def distance(self, x, y):
+        return math.sqrt((x - self.x)**2 + (y - self.y)**2)
+
     ### using code from tutorial
     def move_astar(self, target, entities, game_map):
         # Create a FOV map that has the dimensions of the map
