@@ -1,67 +1,18 @@
 import tcod as libtcod
 
-from components.fighter import Fighter
-from components.inventory import Inventory
 from death_functions import kill_monster, kill_player
-from entity import Entity, get_blocking_entities_at_location
+from entity import get_blocking_entities_at_location
 from fov_functions import initialize_fov, recompute_fov
-from game_messages import MessageLog, Message
+from game_messages import Message
 from game_states import GameStates
 from input_handlers import handle_keys, handle_mouse
-from map_objects.game_map import GameMap
-from render_functions import render_all, clear_all, RenderOrder
-from loader_functions.initialize_new_game import get_constants
+from render_functions import render_all, clear_all
+from loader_functions.initialize_new_game import get_constants, get_game_variables
 
 
 def main():
-    # variables
+    # pull variables
     constants = get_constants()
-
-    # screen_width = 80
-    # screen_height = 50
-
-    # bar_width = 20
-    # panel_height = 7
-    # panel_y = screen_height - panel_height
-
-    # message_x = bar_width + 2
-    # message_width = screen_width - bar_width - 2
-    # message_height = panel_height - 1
-
-    # map_width = 80
-    # map_height = 43
-
-    # room_max_size = 10
-    # room_min_size = 6
-    # max_rooms = 30
-
-    # fov_algorithm = 0  # ibtcod.FOV_BASIC
-    # fov_light_walls = True
-    # fov_radius = 7
-
-    # max_monsters_per_room = 3
-    # max_items_per_room = 2
-
-    # colors = {
-    #     'dark_wall': libtcod.Color(0, 0, 50),
-    #     'dark_ground': libtcod.Color(50, 50, 150),
-    #     'light_wall': libtcod.Color(50, 50, 100),  # (130, 110, 50),
-    #     'light_ground': libtcod.Color(75, 75, 175)
-    # }
-
-    # create player
-    fighter_component = Fighter(hp=30, defense=2, power=5)
-    inventory_component = Inventory(26)
-    player = Entity(0,
-                    0,
-                    '@',
-                    libtcod.green,
-                    'Player',
-                    blocks=True,
-                    render_order=RenderOrder.ACTOR,
-                    fighter=fighter_component,
-                    inventory=inventory_component)
-    entities = [player]
 
     # set graphics template (source, type, layout)
     libtcod.console_set_custom_font(
@@ -79,28 +30,19 @@ def main():
     panel = libtcod.console_new(constants['screen_width'],
                                 constants['panel_height'])
 
-    # initialize game_map
-    game_map = GameMap(constants['map_width'], constants['map_height'])
-    game_map.make_map(constants['max_rooms'], constants['room_min_size'],
-                      constants['room_max_size'], constants['map_width'],
-                      constants['map_height'], player, entities,
-                      constants['max_monsters_per_room'],
-                      constants['max_items_per_room'])
+    player, entities, game_map, message_log, game_state = get_game_variables(
+        constants)
 
     fov_recompute = True
 
     fov_map = initialize_fov(game_map)
-
-    message_log = MessageLog(constants['message_x'],
-                             constants['message_width'],
-                             constants['message_height'])
 
     # variables for key and mouse inputs
     key = libtcod.Key()
     mouse = libtcod.Mouse()
 
     # game loop
-    game_state = GameStates.PLAYER_TURN
+
     previous_game_state = game_state
 
     targeting_item = None
