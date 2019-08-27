@@ -4,6 +4,7 @@ from random import randint
 from components.ai import BasicMonster
 from components.fighter import Fighter
 from components.item import Item
+from components.stairs import Stairs
 from entity import Entity
 from map_objects.tile import Tile
 from map_objects.rectangle import Rect
@@ -13,10 +14,11 @@ from game_messages import Message
 
 
 class GameMap:
-    def __init__(self, width, height):
+    def __init__(self, width, height, dungeon_level=1):
         self.width = width
         self.height = height
         self.tiles = self.initialize_tiles()
+        self.dungeon_level = dungeon_level
 
     def initialize_tiles(self):
         tiles = [[Tile(True) for y in range(self.height)]
@@ -30,6 +32,9 @@ class GameMap:
         # Create rooms and passages
         rooms = []
         num_rooms = 0
+
+        center_of_last_room_x = None
+        center_of_last_room_y = None
 
         for r in range(max_rooms):
             # random width and height
@@ -49,6 +54,10 @@ class GameMap:
                 self.create_room(new_room)
                 # center coordinates of new room
                 (new_x, new_y) = new_room.center()
+
+                # find center of final room to place stairs
+                center_of_last_room_x = new_x
+                center_of_last_room_y = new_y
 
                 if num_rooms == 0:
                     # first room where player starts
@@ -77,6 +86,16 @@ class GameMap:
                 # append new room to list
                 rooms.append(new_room)
                 num_rooms += 1
+
+        stairs_component = Stairs(self.dungeon_level + 1)
+        down_stairs = Entity(center_of_last_room_x,
+                             center_of_last_room_y,
+                             '>',
+                             libtcod.white,
+                             'Stairs',
+                             render_order=RenderOrder.STAIRS,
+                             stairs=stairs_component)
+        entities.append(down_stairs)
 
     def create_room(self, room):
         # got through the tiles in the rectangle and make them passable
