@@ -40,6 +40,8 @@ def handle_player_turn_keys(key):
         return {'move': (-1, 1)}
     elif key_char == 'n':
         return {'move': (1, 1)}
+    elif key_char == 'z':
+        return {'wait': True}
 
     if key_char == 'g':
         return {'pickup': True}
@@ -57,7 +59,7 @@ def handle_player_turn_keys(key):
         return {'show_character_screen': True}
 
     # fullscreen toggle and exit keys
-    if key.vk == libtcod.KEY_ENTER and libtcod.KEY_ALT:
+    if key.vk == libtcod.KEY_SHIFT and libtcod.KEY_ALT:
         return {'fullscreen': True}
     elif key.vk == libtcod.KEY_ESCAPE:
         return {'exit': True}
@@ -72,8 +74,8 @@ def handle_player_dead_keys(key):
     if key_char == 'i':
         return {'show_inventory': True}
 
-    if key.vk == libtcod.KEY_ENTER and key.lalt:
-        # alt + enter: toggle full screen
+    if key.vk == libtcod.KEY_SHIFT and libtcod.KEY_ALT:
+        # alt + shift: toggle full screen
         return {'fullscreen': True}
     elif key.vk == libtcod.KEY_ESCAPE:
         # exit the menu

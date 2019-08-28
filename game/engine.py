@@ -53,10 +53,10 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel,
 
         # key pressed handling
         action = handle_keys(key, game_state)
-        print('Typed {0}'.format(action))
         mouse_action = handle_mouse(mouse)
 
         move = action.get('move')
+        wait = action.get('wait')
         pickup = action.get('pickup')
         show_inventory = action.get('show_inventory')
         drop_inventory = action.get('drop_inventory')
@@ -89,6 +89,9 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel,
                     fov_recompute = True
 
                 game_state = GameStates.ENEMY_TURN
+
+        elif wait:
+            game_state = GameStates.ENEMY_TURN
 
         elif pickup and game_state == GameStates.PLAYER_TURN:
             for entity in entities:
