@@ -61,6 +61,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel,
         drop_inventory = action.get('drop_inventory')
         inventory_index = action.get('inventory_index')
         take_stairs = action.get('take_stairs')
+        level_up = action.get('level_up')
         exit = action.get('exit')
         fullscreen = action.get('fullscreen')
 
@@ -133,6 +134,17 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel,
             else:
                 message_log.add_message(
                     Message('There are no stairs here.', libtcod.yellow))
+
+        if level_up:
+            if level_up == 'hp':
+                player.fighter.max_hp += 20
+                player.fighter.hp += 20
+            elif level_up == 'str':
+                player.fighter.power += 1
+            elif level_up == 'def':
+                player.fighter.defense += 1
+
+            game_state = previous_game_state
 
         if game_state == GameStates.TARGETING:
             if left_click:
