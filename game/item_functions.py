@@ -1,4 +1,5 @@
 import tcod as libtcod
+from random import randint
 
 from game_messages import Message
 from components.ai import ConfusedMonster
@@ -135,7 +136,7 @@ def cast_confuse(*args, **kwargs):
 
     for entity in entities:
         if entity.x == target_x and entity.y == target_y and entity.ai:
-            confused_ai = ConfusedMonster(entity.ai, 10)
+            confused_ai = ConfusedMonster(entity.ai, randint(8, 12))
 
             confused_ai.owner = entity
             entity.ai = confused_ai

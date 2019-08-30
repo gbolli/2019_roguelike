@@ -35,9 +35,6 @@ def get_constants():
     fov_light_walls = True
     fov_radius = 7
 
-    #max_monsters_per_room = 3
-    #max_items_per_room = 2
-
     colors = {
         'dark_wall': libtcod.Color(0, 0, 50),
         'dark_ground': libtcod.Color(50, 50, 150),
@@ -63,8 +60,6 @@ def get_constants():
         'fov_algorithm': fov_algorithm,
         'fov_light_walls': fov_light_walls,
         'fov_radius': fov_radius,
-        #'max_monsters_per_room': max_monsters_per_room,
-        #'max_items_per_room': max_items_per_room,
         'colors': colors
     }
 
@@ -73,7 +68,7 @@ def get_constants():
 
 def get_game_variables(constants):
 
-    fighter_component = Fighter(hp=30, defense=2, power=5)
+    fighter_component = Fighter(hp=50, defense=1, power=5)
     inventory_component = Inventory(26)
     level_component = Level()
 

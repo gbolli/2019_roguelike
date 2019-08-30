@@ -115,22 +115,22 @@ class GameMap:
 
     def place_entities(self, room, entities):
         # get a random number of monsters
-        number_of_monsters = from_dungeon_level([[2, 1], [3, 4], [5, 6]],
+        number_of_monsters = from_dungeon_level([[2, 1], [3, 3], [5, 5]],
                                                 self.dungeon_level)
-        number_of_items = from_dungeon_level([[1, 1], [2, 4]],
+        number_of_items = from_dungeon_level([[1, 1], [2, 3]],
                                              self.dungeon_level)
 
         monster_chances = {
             'orc':
             80,
             'troll':
-            from_dungeon_level([[15, 3], [30, 5], [60, 7]], self.dungeon_level)
+            from_dungeon_level([[15, 2], [30, 3], [60, 4]], self.dungeon_level)
         }
         item_chances = {
             'healing_potion': 35,
-            'lightning_scroll': from_dungeon_level([[25, 4]],
+            'lightning_scroll': from_dungeon_level([[25, 3]],
                                                    self.dungeon_level),
-            'fireball_scroll': from_dungeon_level([[25, 6]],
+            'fireball_scroll': from_dungeon_level([[25, 4]],
                                                   self.dungeon_level),
             'confusion_scroll': from_dungeon_level([[10, 2]],
                                                    self.dungeon_level)
@@ -148,7 +148,7 @@ class GameMap:
                 monster_choice = random_choice_from_dict(monster_chances)
 
                 if monster_choice == 'orc':
-                    fighter_component = Fighter(hp=10,
+                    fighter_component = Fighter(hp=randint(8, 10),
                                                 defense=0,
                                                 power=3,
                                                 xp=35)
@@ -164,9 +164,9 @@ class GameMap:
                                      fighter=fighter_component,
                                      ai=ai_component)
                 else:
-                    fighter_component = Fighter(hp=16,
+                    fighter_component = Fighter(hp=randint(18, 22),
                                                 defense=1,
-                                                power=4,
+                                                power=6,
                                                 xp=100)
                     ai_component = BasicMonster()
 
@@ -194,7 +194,7 @@ class GameMap:
 
                 if item_choice == 'healing_potion':
                     item_component = Item(use_function=heal,
-                                          amount=randint(3, 5))
+                                          amount=randint(8, 11))
                     item = Entity(x,
                                   y,
                                   '!',
@@ -210,7 +210,7 @@ class GameMap:
                         targeting_message=Message(
                             'Left click a target tile for the fireball, or right click to cancel.',
                             libtcod.light_cyan),
-                        damage=12,
+                        damage=randint(12, 15),
                         radius=3)
                     item = Entity(x,
                                   y,
@@ -237,7 +237,7 @@ class GameMap:
 
                 else:
                     item_component = Item(use_function=cast_lightning,
-                                          damage=20,
+                                          damage=randint(18, 30),
                                           maximum_range=5)
                     item = Entity(x,
                                   y,
