@@ -43,7 +43,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel,
                    fov_recompute, message_log, constants['screen_width'],
                    constants['screen_height'], constants['bar_width'],
                    constants['panel_height'], constants['panel_y'], mouse,
-                   constants['colors'], game_state)
+                   constants['colors'], game_state, constants)
 
         fov_recompute = False
 
@@ -298,9 +298,16 @@ def main():
     constants = get_constants()
 
     # set graphics template (source, type, layout)
+
+    # --- original setup ---
+    # libtcod.console_set_custom_font(
+    #     'arial10x10.png',
+    #     libtcod.FONT_TYPE_GRAYSCALE | libtcod.FONT_LAYOUT_TCOD)
+
+    # --- new font file ---
     libtcod.console_set_custom_font(
-        'arial10x10.png',
-        libtcod.FONT_TYPE_GRAYSCALE | libtcod.FONT_LAYOUT_TCOD)
+        'TiledFont.png',
+        libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD, 32, 10)
 
     # create screen (width, height, title, fullscreen_boolean)
     libtcod.console_init_root(constants['screen_width'],
