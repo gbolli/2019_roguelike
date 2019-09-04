@@ -1,4 +1,5 @@
 import tcod as libtcod
+from pygame import mixer
 
 from death_functions import kill_monster, kill_player
 from entity import get_blocking_entities_at_location
@@ -10,6 +11,8 @@ from render_functions import render_all, clear_all
 from loader_functions.initialize_new_game import get_constants, get_game_variables
 from loader_functions.data_loaders import load_game, save_game
 from menus import main_menu, message_box
+
+# def play_background(self):
 
 
 def play_game(player, entities, game_map, message_log, game_state, con, panel,
@@ -336,7 +339,16 @@ def main():
 
     libtcod.console_set_fullscreen(True)
 
+    # mixer.music.play(-1)
+    # music_loop = mixer.Sound('Cave_Loop.wav')
+    # mixer.Sound.play(music_loop)
+
+    mixer.init()
+    music_loop = mixer.Sound('Cave_Loop.wav')
+    mixer.Sound.play(music_loop, loops=-1)
+
     while not libtcod.console_is_window_closed():
+
         libtcod.sys_check_for_event(
             libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
 
