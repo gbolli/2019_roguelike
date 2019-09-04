@@ -163,17 +163,15 @@ class GameMap:
                                                 xp=35)
                     ai_component = BasicMonster()
 
-                    monster = Entity(
-                        x,
-                        y,
-                        constants['orc_tile'],
-                        #  libtcod.desaturated_green,
-                        libtcod.light_green,
-                        'Orc',
-                        blocks=True,
-                        render_order=RenderOrder.ACTOR,
-                        fighter=fighter_component,
-                        ai=ai_component)
+                    monster = Entity(x,
+                                     y,
+                                     constants['orc_tile'],
+                                     libtcod.lightest_green,
+                                     'Orc',
+                                     blocks=True,
+                                     render_order=RenderOrder.ACTOR,
+                                     fighter=fighter_component,
+                                     ai=ai_component)
                 else:
                     fighter_component = Fighter(hp=randint(18, 22),
                                                 defense=1,

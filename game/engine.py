@@ -334,6 +334,8 @@ def main():
     key = libtcod.Key()
     mouse = libtcod.Mouse()
 
+    libtcod.console_set_fullscreen(True)
+
     while not libtcod.console_is_window_closed():
         libtcod.sys_check_for_event(
             libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
